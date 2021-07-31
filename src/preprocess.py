@@ -1,5 +1,5 @@
 import os, json
-import numpy as np
+from pprint import pprint
 from PIL import Image
 import matplotlib.pyplot as plt
 import fiftyone as fo
@@ -12,23 +12,40 @@ import fiftyone as fo
 #     max_samples=50,
 # )
 
-# Visualize the dataset in the FiftyOne App
-# session = fo.launch_app(dataset, port=8080)
-
-# The directory in which the dataset's images are stored
 IMAGES_DIR = "../dataset/data/"
 LABELS_DIR = "../dataset/labels.json"
+IMG_INFO_DIR = "../dataset/image_info.json"
 
 with open(LABELS_DIR, 'r') as f:
     data = json.load(f)
-
-print (data['annotations'][0].keys())    
-print (data['annotations'][0]['image_id'])
-print (data['annotations'][0]['id'])
-
-# fig = plt.figure()
-# for i, f in enumerate(os.listdir(IMAGES_DIR), 0):
-    # fig.add_subplot(5, 11, i+1)
-    # plt.imshow(Image.open(IMAGES_DIR + f))
     
-# plt.show()
+with open(IMG_INFO_DIR, 'r') as f:
+    images = json.load(f)
+    
+def process_json(record):
+    return {
+        'file_name': record['file_name'],
+        'height': record['height'],
+        'width': record['width'],
+        'id': record['id']
+    }
+    
+json_images = data['images']
+json_annotations = data['annotations']
+json_categories = data['categories']
+    
+MASTER_LIST = {}
+
+for i in range(len(images['info'])):
+    record = images['info'][i]
+    MASTER_LIST[record['id']] = {
+        'image_info': record,
+        'annotations': []
+    }
+    
+    for i, annot in enumerate(json_annotations, 0):
+        if annot['image_id'] == record['id']:
+            MASTER_LIST[record['id']]['annotations'].append(annot)
+            
+with open('../dataset/MASTERLIST.json', 'a') as f:
+    json.dump(MASTER_LIST, f)
