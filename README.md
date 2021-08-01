@@ -14,3 +14,13 @@ Instead of treating each pixel as a node, I also experiment with image patches. 
 
 ## Challenges
 This method does not scale well when the image is very large owing to the number of pixel (nodes) to be trained upon.
+
+## TODO
+- [ ] Collate data into single source JSON
+- [ ] Get segmentation masks
+- [ ] Create graph dataset
+    - [ ] Adjacency Matrix
+    - [ ] Node labels based on Convex Hull
+    - [ ] Reformat into `torch_geometric` standard
+    - [ ] Feed into `torch_geometric.data.DataLoader`
+- [ ] Build, train, and test GCN
