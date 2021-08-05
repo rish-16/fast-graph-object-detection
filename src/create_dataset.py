@@ -66,6 +66,9 @@ def get_node_features(img):
     print (out.shape)
     return out
 
+def get_node_labels(img, mask, n_classes):
+        
+
 img = np.random.randint(0, 10, size=(3, 3, 3))
 print (img)
 print (get_node_features(img))
