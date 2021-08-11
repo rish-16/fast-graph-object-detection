@@ -34,6 +34,7 @@ class PennFudanDataset(torch.utils.data.Dataset):
         # split the color-encoded mask into a set
         # of binary masks
         masks = mask == obj_ids[:, None, None]
+        label_template_idxs = np.zeros_like(np.array(img))
 
         # get bounding box coordinates for each mask
         num_objs = len(obj_ids)
@@ -60,7 +61,7 @@ class PennFudanDataset(torch.utils.data.Dataset):
         target = {}
         target["boxes"] = boxes
         target["labels"] = labels
-        target["masks"] = masks
+        target["masks"] = torch.sum(masks, 0).unsqueeze(-1)
         target["image_id"] = image_id
         target["area"] = area
         target["iscrowd"] = iscrowd
@@ -75,23 +76,29 @@ class PennFudanDataset(torch.utils.data.Dataset):
     
 ds = PennFudanDataset("../dataset/data_pt/PennFudanPed/", transforms=None)
 
-idx = 11
-img, target = ds[idx]
-boxes = target['boxes']
-masks = target['masks']
-masks = torch.sum(masks, 0).unsqueeze(-1)
+fig = plt.figure()
+for i in range(1, 10):
+    if i == 10:
+        break
+    
+    img, target = ds[i]
+    boxes = target['boxes']
+    masks = target['masks']
+    labels = target['labels']    
+    
+    fig.add_subplot(3, 3, i)
+    plt.imshow(masks, cmap="gray")
+    
+plt.show()    
 
-fig, ax = plt.subplots()
-plt.imshow(img)
-plt.imshow(masks, alpha=0.25)
-
-for box in boxes:
-    r0 = box[0]
-    c0 = box[1]
-    r1 = box[2]
-    c1 = box[3]
-    w = r1 - r0
-    h = c1 - c0
-    rect = patches.Rectangle([r0, c0], w, h, linewidth=1, edgecolor='r', facecolor='none')
-    ax.add_patch(rect)
-plt.show()
+# for box in boxes:
+    # r0 = box[0]
+    # c0 = box[1]
+    # r1 = box[2]
+    # c1 = box[3]
+    # w = r1 - r0
+    # h = c1 - c0
+    # rect = patches.Rectangle([r0, c0], w, h, linewidth=1, edgecolor='r', facecolor='none')
+    # ax.add_patch(rect)
+    
+# 
