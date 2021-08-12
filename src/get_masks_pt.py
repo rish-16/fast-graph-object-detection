@@ -100,5 +100,3 @@ plt.show()
     # h = c1 - c0
     # rect = patches.Rectangle([r0, c0], w, h, linewidth=1, edgecolor='r', facecolor='none')
     # ax.add_patch(rect)
-    
-# 

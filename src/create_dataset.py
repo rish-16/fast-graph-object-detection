@@ -59,18 +59,3 @@ def create_adjacency_matrix(img):
                 matrix[source_index][target_idx] = 1
                 
     return matrix
-
-def get_node_features(img):
-    h, w, c = img.shape
-    out = rearrange(img, 'h w c -> (h w) c')
-    print (out.shape)
-    return out
-
-def get_node_labels(img, mask, n_classes):
-        
-
-img = np.random.randint(0, 10, size=(3, 3, 3))
-print (img)
-print (get_node_features(img))
-# matrix = create_adjacency_matrix(img)
-# display(matrix)
